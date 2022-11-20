@@ -1916,7 +1916,7 @@ class NetUSB:
     pass
 
 
-# end-of-class Network_USB
+# end-of-class NetUSB
 
 
 class CD:

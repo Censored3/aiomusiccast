@@ -77,6 +77,7 @@ ZONE_FUNC_LIST_TO_FEATURE_MAPPING = {
     "dts_dialogue_control": ZoneFeature.DTS_DIALOGUE_CONTROL,
     "adaptive_dsp_level": ZoneFeature.ADAPTIVE_DSP_LEVEL,
     "mono": ZoneFeature.MONO,
+    "power": ZoneFeature.NETUSB_PRESET, ## TODO
 }
 
 MIME_TYPE_UPNP_CLASS = {

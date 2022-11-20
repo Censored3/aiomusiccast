@@ -93,3 +93,4 @@ class ZoneFeature(Feature):
     DTS_DIALOGUE_CONTROL = auto()
     ADAPTIVE_DSP_LEVEL = auto()
     MONO = auto()
+    NETUSB_PRESET = auto()

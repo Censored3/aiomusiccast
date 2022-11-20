@@ -49,6 +49,18 @@ _device_capabilities = {
 """Dictionary of all ZoneFeatures with a callable as value. 
 The callable expects an ID, a MusicCastDevice and a zone_id as parameters."""
 _zone_capabilities = {
+
+
+    ZoneFeature.NETUSB_PRESET: lambda capability_id, device, zone_id: OptionSetter(
+        capability_id,
+        "NetUSB Presets",
+        EntityType.CONFIG,
+        lambda: device.data.zones[zone_id].netusb_preset_selected, #TODO
+        lambda val: device.recall_netusb_preset(zone_id, val),
+        {idx: ' - '.join(name[::-1]) for idx, name in device.data.netusb_preset_list.items()},
+    ),
+
+
     ZoneFeature.SURR_DECODER_TYPE: lambda capability_id, device, zone_id: OptionSetter(
         capability_id,
         "Surround Decoder Device",

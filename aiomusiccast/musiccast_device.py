@@ -856,8 +856,13 @@ class MusicCastDevice:
             Zone.set_input(zone_id, source, mode)
         )
 
+    async def get_netusb_preset_selected(self, zone_id):
+        """ Placeholder method -FK"""
+        pass
+
     async def recall_netusb_preset(self, zone_id, preset):
         """Play the selected preset."""
+        _LOGGER.debug(f"Recall NetUSB preset: zone: {zone_id} - preset: {preset}")
         await self.device.get(NetUSB.recall_preset(zone_id, preset))
 
     async def store_netusb_preset(self, preset):
@@ -1298,3 +1303,5 @@ class MusicCastDevice:
             for index, entry in enumerate(result.get('preset_info', []))
             if entry.get('input') != 'unknown'
         }
+        _LOGGER.info("Fetching netusb presets...")
+        _LOGGER.debug(f"NetUSB presets: {self.data.netusb_preset_list}")
