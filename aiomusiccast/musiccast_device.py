@@ -864,6 +864,7 @@ class MusicCastDevice:
             Zone.set_input(zone_id, source, mode)
         )
 
+    @_check_feature(ZoneFeature.NETUSB_PRESET)
     async def recall_netusb_preset(self, zone_id, preset):
         """Play the selected preset."""
         _LOGGER.debug(f"Recall NetUSB preset: zone: {zone_id} - preset: {preset}")
