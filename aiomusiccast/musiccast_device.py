@@ -192,6 +192,7 @@ class MusicCastDevice:
         """Fetch NetUSB data."""
         _LOGGER.debug("Fetching netusb...")
         self._netusb_play_info = await self.device.request_json(NetUSB.get_play_info())
+        _LOGGER.debug(f"Fetching netusb: play_info: {self._netusb_play_info}")
 
         self.data.netusb_input = self._netusb_play_info.get(
             "input", self.data.netusb_input
@@ -221,6 +222,9 @@ class MusicCastDevice:
         self.data.netusb_play_time = self._netusb_play_info.get("play_time", None)
 
         self.data.netusb_play_time_updated = datetime.now(timezone.utc)
+
+        self._fetch_netusb_preset_selected()
+
 
     async def _fetch_tuner(self):
         """Fetch tuner data."""
@@ -856,13 +860,10 @@ class MusicCastDevice:
             Zone.set_input(zone_id, source, mode)
         )
 
-    async def get_netusb_preset_selected(self, zone_id):
-        """ Placeholder method -FK"""
-        pass
-
     async def recall_netusb_preset(self, zone_id, preset):
         """Play the selected preset."""
         _LOGGER.debug(f"Recall NetUSB preset: zone: {zone_id} - preset: {preset}")
+        self.data.netusb_preset_selected = preset
         await self.device.get(NetUSB.recall_preset(zone_id, preset))
 
     async def store_netusb_preset(self, preset):
@@ -1305,3 +1306,22 @@ class MusicCastDevice:
         }
         _LOGGER.info("Fetching netusb presets...")
         _LOGGER.debug(f"NetUSB presets: {self.data.netusb_preset_list}")
+
+
+    def _fetch_netusb_preset_selected(self):
+        # heuristic preset_selected matching -FK
+        #     1: ('net_radio', 'NRJ België (Antwerp/Dutch)'), -- 0, 1 == 'input', 'artist'
+        currently_playing = (self.data.netusb_input, self.data.netusb_artist)
+        current_preset_info = self.data.netusb_preset_list.get(
+                self.data.netusb_preset_selected, (None, None)
+        )
+        _LOGGER.debug(f"_fetch_netusb_preset_selected(): currently_playing: {currently_playing} - current_preset_info: {current_preset_info}")
+
+        # no current preset info, or doesn't match
+        if not current_preset_info[0] or current_preset_info != currently_playing:
+            # check if currently playing matches a known preset
+            matches = [index for index, value in self.data.netusb_preset_list.items() if value == currently_playing]
+            _LOGGER.debug(f"_fetch_netusb_preset_selected(): Matching stored presets: {matches}")
+            self.data.netusb_preset_selected = matches[0] if len(matches) > 0 else None
+
+        _LOGGER.debug(f"Fetching currently playing NetUSB preset: {self.data.netusb_preset_selected}: {self.data.netusb_preset_list.get(self.data.netusb_preset_selected, None)}")

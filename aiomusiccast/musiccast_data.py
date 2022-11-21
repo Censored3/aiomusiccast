@@ -58,6 +58,7 @@ class MusicCastData:
         self.netusb_total_time = None
 
         self.netusb_preset_list = {}
+        self.netusb_preset_selected: int | None = None
 
         # Tuner
         self.band = None
@@ -174,8 +175,6 @@ class MusicCastZoneData:
         self.surround_3d: bool | None = None
 
         self.surr_decoder_type: str | None = None
-
-        self.netusb_preset_selected = None
 
 
 class RangeStep:
