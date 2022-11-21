@@ -462,6 +462,10 @@ class MusicCastDevice:
                     zone_data.min_volume = range_volume.get("min")
                     zone_data.max_volume = range_volume.get("max")
 
+                if "preset" in self._features.get("netusb").keys() and self._features.get("netusb").get("preset").get("num", 0) > 0:
+                    _LOGGER.debug(f'Adding feature netusb.preset... Supported number of presets: {self._features.get("netusb").get("preset").get("num", 0)}')
+                    zone_data.features |= ZoneFeature.NETUSB_PRESET
+
                 self.data.zones[zone_id] = zone_data
 
             if "clock" in self._features.keys():
