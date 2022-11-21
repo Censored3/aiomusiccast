@@ -1321,11 +1321,19 @@ class MusicCastDevice:
         )
         _LOGGER.debug(f"_fetch_netusb_preset_selected(): currently_playing: {currently_playing} - current_preset_info: {current_preset_info}")
 
+        # Extra check for netusb being active:
+        # when input is switched to other than netusb, MC doesn't clear 
+        # the artist and source fields allowing for a false match
+        if self.data.zones[zone_id].input != currently_playing[0]:
+            self.data.netusb_preset_selected = None
+
         # no current preset info, or doesn't match
-        if not current_preset_info[0] or current_preset_info != currently_playing:
+        elif not current_preset_info[0] or current_preset_info != currently_playing:
             # check if currently playing matches a known preset
             matches = [index for index, value in self.data.netusb_preset_list.items() if value == currently_playing]
             _LOGGER.debug(f"_fetch_netusb_preset_selected(): Matching stored presets: {matches}")
-            self.data.netusb_preset_selected = matches[0] if len(matches) > 0 else None
+            
+            # select first matched preset if any, or set to None
+            self.data.netusb_preset_selected = matches[0] if any(matches) else None
 
         _LOGGER.debug(f"Fetching currently playing NetUSB preset: {self.data.netusb_preset_selected}: {self.data.netusb_preset_list.get(self.data.netusb_preset_selected, None)}")
