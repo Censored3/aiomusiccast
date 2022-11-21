@@ -299,11 +299,16 @@ class MusicCastDevice:
         zone_data.link_audio_quality = zone.get("link_audio_quality")
         zone_data.link_control = zone.get("link_control")
 
+        ## dirty, dirty fix to get instant updates -- the callable
+        #  should probably stay in the capability_registry and updating the
+        #  property through correct _fetch_zone() calls/updates is probably
+        #  more elegant
         zone_data.netusb_preset_selected_zone = (
-            self.data.netusb_preset_selected
+            lambda: self.data.netusb_preset_selected
             if self.data.netusb_input == zone.get("input")
             else None
         )
+        _LOGGER.debug("Updating zone preset_selected: zone_id: %s -- device preset_selected: %s -- to: %s", zone_id, self.data.netusb_preset_selected, zone_data.netusb_preset_selected_zone())
 
         self.data.zones[zone_id] = zone_data
         await self._update_input(zone_id, zone.get("input"))

@@ -55,7 +55,7 @@ _zone_capabilities = {
         capability_id,
         "NetUSB Presets",
         EntityType.CONFIG,
-        lambda: device.data.zones[zone_id].netusb_preset_selected_zone, #TODO
+        device.data.zones[zone_id].netusb_preset_selected_zone, #TODO
         lambda val: device.recall_netusb_preset(zone_id, val),
         {idx: ' - '.join(name[::-1]) for idx, name in device.data.netusb_preset_list.items()},
     ),
