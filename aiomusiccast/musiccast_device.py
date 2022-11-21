@@ -515,8 +515,8 @@ class MusicCastDevice:
         }
 
         if "netusb" in self._features.keys() and self._features.get("netusb").get("func_list"):
+            await self._fetch_netusb_presets() # << call this first so self.data.netusb_preset_selected is properly populated on init
             await self._fetch_netusb()
-            await self._fetch_netusb_presets()
 
         if "tuner" in self._features.keys():
             await self._fetch_tuner()
