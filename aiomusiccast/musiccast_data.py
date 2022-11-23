@@ -176,7 +176,7 @@ class MusicCastZoneData:
 
         self.surr_decoder_type: str | None = None
 
-        self.netusb_preset_selected_zone: int | None = None
+        # self.netusb_preset_selected_zone: int | None = None
 
 class RangeStep:
     minimum: int = 0
