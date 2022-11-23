@@ -558,6 +558,12 @@ class MusicCastDevice:
         for zone_id in self.data.zones.keys():
             self.data.zones[zone_id].capabilities = build_zone_capabilities(self, zone_id)
 
+    def get_netusb_preset_list(self):
+        # more user-friendly representation of the netusb_preset_list
+        return {
+            idx: ' - '.join(name[::-1]) for idx, name in self.data.netusb_preset_list.items()
+        }
+
     # -----Commands-----
     async def turn_on(self, zone_id):
         """Turn the media player on."""
